@@ -22,15 +22,11 @@ int comp_ss(unsigned char* ss_a, unsigned char * ss_b){
 int main()
 {
 	FILE *key_file;
-
-	if ( (key_file = fopen("test_keys", "w")) == NULL ) {
-	fprintf(stderr, "Couldn't open <test_keys> for write\n");
-		return -1;
-	}
+	char key_file_name[20];
 
 
 
-	int keys_to_test = 1;
+	int keys_to_test = 5;
 	unsigned char pk[keys_to_test][CRYPTO_PUBLICKEYBYTES]; 
 	unsigned char sk[keys_to_test][CRYPTO_SECRETKEYBYTES];
 	unsigned char ss_tx[keys_to_test][CRYPTO_BYTES];
@@ -39,6 +35,13 @@ int main()
 	int return_code = 0;
 	
 	for(int i = 0; i < keys_to_test; i++){	
+		sprintf(key_file_name, "test_keys%i.txt", i);	
+		printf("Writing keys to %s\n", key_file_name);
+
+		if ( (key_file = fopen(key_file_name, "w")) == NULL ) {
+		fprintf(stderr, "Couldn't open <%s> for write\n", key_file_name);
+			return -1;
+		}
 		return_code = crypto_kem_keypair(pk[i], sk[i]);
 		if(return_code != 0){
 			fprintf(stderr, "Key gen failed with code: %i\n", return_code);
@@ -53,7 +56,6 @@ int main()
 		if(return_code != 0){
 			fprintf(stderr, "Key gen failed with code: %i\n", return_code);
 		}
-		printf("Ciphertext: %s\n", ct[i]);
 
 
 		if(!comp_ss(ss_tx[i], ss_rx[i])){
@@ -62,6 +64,7 @@ int main()
 		else{
 			printf("Test successful\n");
 		}
+		//close(key_file);
 	}
 
 	return 0;

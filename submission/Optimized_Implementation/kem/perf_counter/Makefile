@@ -55,7 +55,7 @@ $(_ODIRKAT)/%.o: %.c $(_ODIRKAT) $(DEPS)
 $(LIBTARGET)/libntskem-12-64-opt.a: $(OBJS)
 	$(MAKELIB)
 
-$(BINTARGET)/ntskem-12-64-opt-test: encap_test.c test/ntskem_test.c $(LIBTARGET)/libntskem-12-64-opt.a 
+$(BINTARGET)/ntskem-12-64-opt-test: keygen_test.c test/ntskem_test.c $(LIBTARGET)/libntskem-12-64-opt.a 
 	$(CC) $(CFLAGS) -DNTSKEM_M=12 -DNTSKEM_T=64 -o $@ $(LDFLAGS) $^ $(LIBS) 
 
 $(BINTARGET)/ntskem-12-64-opt-kat: nist/PQCgenKAT_kem.c $(LIBTARGET)/libntskem-12-64-opt.a
